@@ -15,15 +15,13 @@ project-root/
 │   │   ├── models/
 │   │   └── middleware/
 │   └── ...
-├── frontend/
-│   ├── Dockerfile
-│   ├── package.json
-│   ├── next.config.js
-│   ├── pages/ (或 app/ 如果使用 App Router)
-│   ├── components/
-│   └── ...
-└── init-scripts/
-    └── init.sql
+└── frontend/
+    ├── Dockerfile
+    ├── package.json
+    ├── next.config.js
+    ├── pages/ (或 app/ 如果使用 App Router)
+    ├── components/
+    └── ...
 ```
 
 ## 使用方法
@@ -33,6 +31,12 @@ project-root/
 3. **啟動服務**：
    ```bash
    docker-compose up -d
+   ```
+   ```bash
+   docker-compose up -d sqlserver
+   ```
+   ```bash
+   docker-compose up -d redis
    ```
 4. **查看日誌**：
    ```bash
