@@ -13,7 +13,7 @@ services:
       - "${SQL_PORT:-1433}:1433"
     volumes:
       - sqlserver_data:/var/opt/mssql
-      - ./init-scripts:/docker-entrypoint-initdb.d
+      - ./sqlserver/backup:/var/opt/mssql/backup
     networks:
       - app-network
     restart: unless-stopped
