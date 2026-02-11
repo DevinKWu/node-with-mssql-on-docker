@@ -96,11 +96,12 @@ services:
     container_name: nextjs_frontend
     environment:
       NODE_ENV: ${NODE_ENV:-development}
+      PORT: ${FRONTEND_PORT:-3000}
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
       NEXTAUTH_URL: ${NEXTAUTH_URL}
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
     ports:
-      - "${FRONTEND_PORT:-3000}:3000"
+      - "${FRONTEND_PORT:-3000}:${FRONTEND_PORT:-3000}"
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -112,7 +113,7 @@ services:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000"]
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:${FRONTEND_PORT:-3000}"]
       interval: 30s
       timeout: 10s
       retries: 5
