@@ -4,13 +4,13 @@ WORKDIR /app
 # 開發階段
 FROM base AS dev
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 CMD ["npm", "run", "dev"]
 
 # 建構階段
 FROM base AS builder
 COPY --from=src package*.json ./
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 COPY --from=src . .
 RUN npm run build
 
