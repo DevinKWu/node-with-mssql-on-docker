@@ -71,9 +71,6 @@ services:
       API_SECRET: ${API_SECRET}
     ports:
       - "${BACKEND_PORT:-3001}:${BACKEND_PORT:-3001}"
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
     networks:
       - app-network
     depends_on:
@@ -102,10 +99,6 @@ services:
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
     ports:
       - "${FRONTEND_PORT:-3000}:${FRONTEND_PORT:-3000}"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-      - /app/.next
     networks:
       - app-network
     depends_on:

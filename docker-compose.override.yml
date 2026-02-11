@@ -1,0 +1,16 @@
+# 開發環境（docker compose up 自動載入）
+services:
+  backend:
+    build:
+      target: dev
+    volumes:
+      - ${BACKEND_PATH}:/app
+      - /app/node_modules
+
+  frontend:
+    build:
+      target: dev
+    volumes:
+      - ${FRONTEND_PATH}:/app
+      - /app/node_modules
+      - /app/.next
