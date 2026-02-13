@@ -1,5 +1,14 @@
 # 開發環境（docker compose up 自動載入）
+# 開放所有服務的 port 供本機直接存取，nginx 僅走 HTTP
 services:
+  sqlserver:
+    ports:
+      - "${SQL_PORT:-1433}:1433"
+
+  redis:
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+
   backend:
     build:
       context: ${BACKEND_PATH}
@@ -12,6 +21,8 @@ services:
         RUN npm ci
         USER nodejs
         CMD ["npm", "run", "dev"]
+    ports:
+      - "${BACKEND_PORT:-3001}:3001"
     volumes:
       - ${BACKEND_PATH}:/app
       - /app/node_modules
@@ -25,7 +36,15 @@ services:
         COPY package*.json ./
         RUN npm ci --legacy-peer-deps
         CMD ["npm", "run", "dev"]
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
     volumes:
       - ${FRONTEND_PATH}:/app
       - /app/node_modules
       - /app/.next
+
+  nginx:
+    ports:
+      - "${NGINX_PORT:-80}:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro

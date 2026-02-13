@@ -7,8 +7,6 @@ services:
       ACCEPT_EULA: Y
       SA_PASSWORD: ${SA_PASSWORD}
       MSSQL_PID: ${MSSQL_PID:-Developer}
-    ports:
-      - "${SQL_PORT:-1433}:1433"
     volumes:
       - sqlserver_data:/var/opt/mssql
       - ./sqlserver/backup:/var/opt/mssql/backup
@@ -26,8 +24,6 @@ services:
   redis:
     image: redis:7-alpine
     container_name: redis_cache
-    ports:
-      - "${REDIS_PORT:-6379}:6379"
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
     command: >
@@ -66,8 +62,6 @@ services:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
       API_SECRET: ${API_SECRET}
-    ports:
-      - "${BACKEND_PORT:-3001}:3001"
     networks:
       - app-network
     depends_on:
@@ -91,8 +85,6 @@ services:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
       NEXTAUTH_URL: ${NEXTAUTH_URL}
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
-    ports:
-      - "${FRONTEND_PORT:-3000}:3000"
     networks:
       - app-network
     depends_on:
@@ -104,6 +96,24 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+
+  # Nginx 反向代理
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_proxy
+    networks:
+      - app-network
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 networks:
   app-network:
