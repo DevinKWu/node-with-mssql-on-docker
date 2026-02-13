@@ -55,19 +55,19 @@ services:
     container_name: express_backend
     environment:
       NODE_ENV: ${NODE_ENV:-development}
-      PORT: ${BACKEND_PORT:-3001}
+      PORT: 3001
       DB_HOST: sqlserver
-      DB_PORT: ${SQL_PORT:-1433}
+      DB_PORT: 1433
       DB_NAME: ${DB_NAME}
       DB_USERNAME: ${DB_USER:-sa}
       DB_PASSWORD: ${SA_PASSWORD}
       REDIS_HOST: redis
-      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_PORT: 6379
       REDIS_PASSWORD: ${REDIS_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
       API_SECRET: ${API_SECRET}
     ports:
-      - "${BACKEND_PORT:-3001}:${BACKEND_PORT:-3001}"
+      - "${BACKEND_PORT:-3001}:3001"
     networks:
       - app-network
     depends_on:
@@ -77,7 +77,7 @@ services:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:${BACKEND_PORT:-3001}/health"]
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3001/health"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -87,12 +87,12 @@ services:
     container_name: nextjs_frontend
     environment:
       NODE_ENV: ${NODE_ENV:-development}
-      PORT: ${FRONTEND_PORT:-3000}
+      PORT: 3000
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
       NEXTAUTH_URL: ${NEXTAUTH_URL}
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
     ports:
-      - "${FRONTEND_PORT:-3000}:${FRONTEND_PORT:-3000}"
+      - "${FRONTEND_PORT:-3000}:3000"
     networks:
       - app-network
     depends_on:
@@ -100,7 +100,7 @@ services:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:${FRONTEND_PORT:-3000}"]
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000"]
       interval: 30s
       timeout: 10s
       retries: 5
