@@ -1,15 +1,16 @@
-# 生產環境 - standalone（docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d）
+# 生產環境
+# docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 services:
   backend:
     build:
-      additional_contexts:
-        src: ${BACKEND_PATH}
+      context: ${BACKEND_PATH}
+    image: myapp-backend
     environment:
       NODE_ENV: production
 
   frontend:
     build:
-      additional_contexts:
-        src: ${FRONTEND_PATH}
+      context: ${FRONTEND_PATH}
+    image: myapp-frontend
     environment:
       NODE_ENV: production

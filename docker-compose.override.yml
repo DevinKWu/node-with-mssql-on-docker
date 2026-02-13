@@ -2,14 +2,29 @@
 services:
   backend:
     build:
-      target: dev
+      context: ${BACKEND_PATH}
+      dockerfile_inline: |
+        FROM node:20-alpine
+        RUN addgroup -g 1001 -S nodejs && \
+            adduser -S nodejs -u 1001
+        WORKDIR /app
+        COPY package*.json ./
+        RUN npm ci
+        USER nodejs
+        CMD ["npm", "run", "dev"]
     volumes:
       - ${BACKEND_PATH}:/app
       - /app/node_modules
 
   frontend:
     build:
-      target: dev
+      context: ${FRONTEND_PATH}
+      dockerfile_inline: |
+        FROM node:20-alpine
+        WORKDIR /app
+        COPY package*.json ./
+        RUN npm ci --legacy-peer-deps
+        CMD ["npm", "run", "dev"]
     volumes:
       - ${FRONTEND_PATH}:/app
       - /app/node_modules

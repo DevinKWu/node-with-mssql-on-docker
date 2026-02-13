@@ -52,9 +52,6 @@ services:
 
   # Node.js Express 後端
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
     container_name: express_backend
     environment:
       NODE_ENV: ${NODE_ENV:-development}
@@ -62,7 +59,7 @@ services:
       DB_HOST: sqlserver
       DB_PORT: ${SQL_PORT:-1433}
       DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER:-sa}
+      DB_USERNAME: ${DB_USER:-sa}
       DB_PASSWORD: ${SA_PASSWORD}
       REDIS_HOST: redis
       REDIS_PORT: ${REDIS_PORT:-6379}
@@ -87,9 +84,6 @@ services:
 
   # Next.js 前端
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
     container_name: nextjs_frontend
     environment:
       NODE_ENV: ${NODE_ENV:-development}
